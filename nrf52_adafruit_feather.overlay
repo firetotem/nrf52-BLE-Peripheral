@@ -1,5 +1,5 @@
 &adc {
-        status = "ok";
+    status = "ok";
 };
 
 &i2c0 {
