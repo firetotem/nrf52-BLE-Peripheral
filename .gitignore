@@ -1,0 +1,10 @@
+# Exclude everything except needed files
+/*
+
+!Kconfig
+!*.overlay
+!.gitignore
+!CMakeLists.txt
+!proj.conf
+!README.md
+!/src

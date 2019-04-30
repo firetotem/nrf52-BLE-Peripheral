@@ -1,0 +1,3 @@
+mainmenu "blinky"
+
+source "$ZEPHYR_BASE/Kconfig.zephyr"
