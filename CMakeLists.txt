@@ -12,7 +12,9 @@ project(bt_peripheral)
 
 #FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE src/main.c
-               $ENV{ZEPHYR_BASE}/samples/bluetooth/gatt/bas.c)
+               src/services/lux_service.c
+               src/hardware/led/led.c)
 
 
+zephyr_library_include_directories(src)
 zephyr_library_include_directories($ENV{ZEPHYR_BASE}/samples/bluetooth)
