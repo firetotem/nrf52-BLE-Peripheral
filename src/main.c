@@ -17,9 +17,10 @@
 #include <bluetooth/gatt.h>
 
 #include <hardware/led/led.h>
+#include <hardware/lux_sensor/lux.h>
 
 #include <services/lux_service.h>
-
+#include <services/batery_service.h>
 
 #include "main.h"
 
@@ -131,6 +132,7 @@ static struct bt_conn_cb conn_callbacks = {
 static const struct bt_data ad[] = {
   BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
   BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LENGTH),
+  BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0x0f, 0x18, 0x0D, 0x18, 0x10, 0x18),
 };
 
 /* Initialization bluetooth peripheral */ 
@@ -144,6 +146,7 @@ static void bt_ready(int err)
   printk("%11d> Bluetooth initialized\n\r", k_uptime_get());
 
   lux_service_init();
+  batery_service_init();
 
   err = bt_le_adv_start(BT_LE_ADV_CONN_NAME, ad, ARRAY_SIZE(ad), NULL, 0);
   if (err) {
@@ -163,33 +166,13 @@ void main(void)
     }
 
     led_init();
+    lux_sensor_init();
+
     led_set_state(LED_RED_PIN, true);
 
     bt_conn_cb_register(&conn_callbacks);
     
-    
-    //int err;
-    struct sensor_value lux = {0};
-    struct device *dev = device_get_binding(CONFIG_TSL2561_NAME);
-
-     if (dev == NULL)
-     {
-       printk("Could not get TSL2561 device\n");
-       return;
-     }
-
-    // if (sensor_sample_fetch(dev) < 0)
-    // {
-    //   printk("Error fetch data\n");
-    // } else
-    // {
-    //   printk("Data TSL2561 fetched\n");
-    // }
-
-    // devGpio = device_get_binding(LED1_GPIO_CONTROLLER);
-    // gpio_pin_configure(devGpio, LED1_GPIO_PIN, GPIO_DIR_OUT);
-    // gpio_pin_write(devGpio, LED1_GPIO_PIN, 0);
-    // uint8_t cnt = 0;
+ 
 
   /* Enable bluetooth peripheral */
   
@@ -197,17 +180,8 @@ void main(void)
   while (1) {
       k_sleep(MSEC_PER_SEC);
       //led_flash_state(true, false, 8);
-    
-     if (sensor_channel_get(dev, SENSOR_CHAN_LIGHT, &lux) < 0)
-     {
-       printk("Cannot read data TSL2561 \n");
-       return;
-     }
-
-     if (lux.val1 < 100)
-     {
-        led_flash_state(false, true, 1);
-     }
+      //printk("RSSI = %d\n\r", *((u32_t *)(0x40001548)));
+   
 
     // if (lux_notify)
     // {

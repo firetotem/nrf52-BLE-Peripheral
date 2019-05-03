@@ -1,5 +1,6 @@
 
 #include <services/lux_service.h>
+#include <hardware/lux_sensor/lux.h>
 
 #define BT_UUID_LUX_SERVICE     BT_UUID_DECLARE_128(0x6c, 0x12, 0x48, 0xb8, 0x6c, 0xb0, 0x11, 0xe9, 0xa9, 0x23, 0x16, 0x81, 0xbe, 0x66, 0x3d, 0x3e)
 #define BT_UUID_LUX_VALUE       BT_UUID_DECLARE_128(0xfd, 0xc1, 0x1e, 0x88, 0x6c, 0xce, 0x11, 0xe9, 0xa9, 0x23, 0x16, 0x81, 0xbe, 0x66, 0x3d, 0x3e)
@@ -36,7 +37,8 @@ ssize_t	read_client_lux(struct bt_conn *conn,
 					     void *buf, 
                          u16_t len,
 					     u16_t offset)
-{
+{   
+    prepare_data_for_srv(getLuxValue());
     bt_gatt_attr_read(conn, attr, buf, len, offset, &lux_value, sizeof(lux_value));
 }
 
@@ -54,5 +56,5 @@ ssize_t	read_lux_descriptor(struct bt_conn *conn,
 
 void prepare_data_for_srv(uint16_t lux)
 {
-    lux_value = ((lux >> 8) | (lux << 8));
+    lux_value = __bswap_16(lux);
 }

@@ -13,7 +13,9 @@ project(bt_peripheral)
 #FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE src/main.c
                src/services/lux_service.c
-               src/hardware/led/led.c)
+               src/services/batery_service.c
+               src/hardware/led/led.c
+               src/hardware/lux_sensor/lux.c)
 
 
 zephyr_library_include_directories(src)
