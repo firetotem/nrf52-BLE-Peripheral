@@ -1,5 +1,6 @@
 
 #include <services/batery_service.h>
+#include <hardware/adc/adc_bat.h>
 
 static u8_t battery_level = 100;
 static u8_t battery_level_subscribed;
@@ -8,6 +9,8 @@ K_TIMER_DEFINE(notify_timer, batery_notify, NULL);
 
 ssize_t	bas_read_fn(struct bt_conn *conn, const struct bt_gatt_attr *attr, void *buf, u16_t len, u16_t offset)
 {
+    battery_level = getBatteryLevel();
+    
     return bt_gatt_attr_read(conn, attr, buf, len, offset, &battery_level, sizeof(battery_level));
 }
 
@@ -48,7 +51,7 @@ void batery_notify(struct k_timer *timer)
     }
 
     // todo: Read batery level
+    battery_level = getBatteryLevel();
     bt_gatt_notify(NULL, &attrs[1], &battery_level, sizeof(battery_level));
-
 
 }

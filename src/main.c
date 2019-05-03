@@ -18,6 +18,7 @@
 
 #include <hardware/led/led.h>
 #include <hardware/lux_sensor/lux.h>
+#include <hardware/adc/adc_bat.h>
 
 #include <services/lux_service.h>
 #include <services/batery_service.h>
@@ -167,6 +168,7 @@ void main(void)
 
     led_init();
     lux_sensor_init();
+    adc_bat_init();
 
     led_set_state(LED_RED_PIN, true);
 
@@ -179,6 +181,7 @@ void main(void)
 
   while (1) {
       k_sleep(MSEC_PER_SEC);
+      //printk("Battery = %d persent\n\r", getBatteryLevel());
       //led_flash_state(true, false, 8);
       //printk("RSSI = %d\n\r", *((u32_t *)(0x40001548)));
    
