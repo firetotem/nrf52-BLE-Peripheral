@@ -23,7 +23,7 @@ void lux_sensor_init()
         printk("Lux sensor init failed\n\r");
         return;
     }
-    printk("Lux sensor initialized\n\r");
+    printk("LUX SENSOR:> initialized\n\r");
     
     m_initialized = true;
     //k_timer_start(&lux_timer, K_MSEC(1000), K_MSEC(LUX_SENSOR_POLLING_TIME));

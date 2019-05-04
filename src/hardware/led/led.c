@@ -41,7 +41,7 @@ void led_init()
         printk("Blue led init failed (err = %d)\n\r", err);
         return;
     }
-    printk("led:> Initialized\n\r");
+    printk("LED:> initialized\n\r");
 }
 
 void state_callback(struct k_timer *timer)

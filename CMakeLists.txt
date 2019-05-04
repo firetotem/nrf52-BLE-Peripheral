@@ -14,9 +14,12 @@ project(bt_peripheral)
 target_sources(app PRIVATE src/main.c
                src/services/lux_service.c
                src/services/batery_service.c
+               src/services/thermo_service.c
+               src/services/immediate_alert.c
                src/hardware/led/led.c
                src/hardware/lux_sensor/lux.c
-               src/hardware/adc/adc_bat.c)
+               src/hardware/adc/adc_bat.c
+               src/hardware/thermometr/thermometr.c)
 
 
 zephyr_library_include_directories(src)

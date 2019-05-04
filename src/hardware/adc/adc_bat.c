@@ -35,7 +35,7 @@ void adc_bat_init()
         return;
     } 
 
-    printk("> %s inititialized\n\r", ADC_NAME);
+    printk("%s:> inititialized\n\r", ADC_NAME);
 }
 
 u8_t getBatteryLevel()

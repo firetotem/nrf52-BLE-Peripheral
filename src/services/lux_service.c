@@ -10,25 +10,18 @@
 u16_t lux_value = 0;
 
 
-static struct bt_gatt_attr attrs[] = {
+BT_GATT_SERVICE_DEFINE(lux_svc,
     BT_GATT_PRIMARY_SERVICE(BT_UUID_LUX_SERVICE),
     BT_GATT_CHARACTERISTIC(BT_UUID_LUX_VALUE, BT_GATT_CHRC_READ, BT_GATT_PERM_READ, read_client_lux, NULL, NULL),
     BT_GATT_DESCRIPTOR(BT_UUID_LUX_DESCRIPTOR, BT_GATT_PERM_READ, read_lux_descriptor, NULL, NULL),
-};
+);
 
 
-static struct bt_gatt_service lux_svc = BT_GATT_SERVICE(attrs);
 
 
 void lux_service_init()
-{
-    int err = bt_gatt_service_register(&lux_svc);
-    if (err)
-    {
-        printk("Lux service init failed (error = %d)\n\r", err);
-        return;
-    }
-    printk("Lux service initialized\n\r");
+{    
+    //printk("Lux service initialized\n\r");
 }
 
 
@@ -39,7 +32,7 @@ ssize_t	read_client_lux(struct bt_conn *conn,
 					     u16_t offset)
 {   
     prepare_data_for_srv(getLuxValue());
-    bt_gatt_attr_read(conn, attr, buf, len, offset, &lux_value, sizeof(lux_value));
+    return bt_gatt_attr_read(conn, attr, buf, len, offset, &lux_value, sizeof(lux_value));
 }
 
 
@@ -50,7 +43,7 @@ ssize_t	read_lux_descriptor(struct bt_conn *conn,
 {
     u8_t description[] = {'t', 's', 'l', '2', '5', '6', '1'};
     
-    bt_gatt_attr_read(conn, attr, buf, len, offset, description, sizeof(description));
+    return bt_gatt_attr_read(conn, attr, buf, len, offset, description, sizeof(description));
 }
 
 
