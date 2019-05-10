@@ -62,7 +62,10 @@ static struct bt_conn_cb conn_callbacks = {
 static const struct bt_data ad[] = {
   BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
   BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LENGTH),
-  BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0x0f, 0x18, 0x09, 0x18, 0x02, 0x18, 0x10, 0x18),
+  BT_DATA_BYTES(BT_DATA_UUID16_ALL, 0x0f, 0x18, /* BAS */
+                                    0x09, 0x18, /* HTS */
+                                    0x02, 0x18, /* IAS */
+                                    0x10, 0x18),/* BPS */
 };
 
 /* Initialization bluetooth peripheral */ 
