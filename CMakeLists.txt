@@ -16,10 +16,12 @@ target_sources(app PRIVATE src/main.c
                src/services/batery_service.c
                src/services/thermo_service.c
                src/services/immediate_alert.c
+               src/services/blood_pressure_service.c
                src/hardware/led/led.c
                src/hardware/lux_sensor/lux.c
                src/hardware/adc/adc_bat.c
-               src/hardware/thermometr/thermometr.c)
+               src/hardware/thermometr/thermometr.c
+               src/hardware/bp_simulator/bp_simulator.c)
 
 
 zephyr_library_include_directories(src)

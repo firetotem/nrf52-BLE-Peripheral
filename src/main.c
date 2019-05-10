@@ -25,12 +25,14 @@
 #include <services/batery_service.h>
 #include <services/thermo_service.h>
 #include <services/immediate_alert.h>
+#include <services/blood_pressure_service.h>
 
 #include "main.h"
 
 #define DEVICE_NAME         CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LENGTH  (sizeof(DEVICE_NAME) - 1)
 
+struct bt_conn *default_connection;
 
 /* Connection callback function */
 static void connected(struct bt_conn *conn, u8_t err)
@@ -39,6 +41,7 @@ static void connected(struct bt_conn *conn, u8_t err)
     printk("Connection failed (err %u)\n", err);
   } else {
     printk("Connected\n");
+    default_connection = bt_conn_ref(conn);
     led_set_state(LED_RED_PIN, false);
     led_set_state(LED_BLUE_PIN, true);
   }
@@ -48,6 +51,8 @@ static void connected(struct bt_conn *conn, u8_t err)
 static void disconnected(struct bt_conn *conn, u8_t reason)
 {
   printk("Disconnected (reason %u)\n", reason);
+  bt_conn_unref(default_connection);
+  default_connection = NULL;
   led_set_state(LED_RED_PIN, true);
   led_set_state(LED_BLUE_PIN, false);
 }
@@ -82,6 +87,7 @@ static void bt_ready(int err)
   batery_service_init();
   thermo_service_init();
   immediate_alert_init();
+  blood_pressure_service_init();
 
   err = bt_le_adv_start(BT_LE_ADV_CONN_NAME, ad, ARRAY_SIZE(ad), NULL, 0);
   if (err) {

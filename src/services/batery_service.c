@@ -6,14 +6,13 @@ static u8_t battery_level = 100;
 static u8_t battery_level_subscribed;
 static struct bt_gatt_ccc_cfg bas_ccc_cfg[BT_GATT_CCC_MAX] = {};
 static struct bt_gatt_cpf bas_cpf;
-static struct bt_conn *connection;
+extern struct bt_conn *default_connection;
 
 K_TIMER_DEFINE(notify_timer, batery_notify, NULL);
 
 
 ssize_t	bas_read_fn(struct bt_conn *conn, const struct bt_gatt_attr *attr, void *buf, u16_t len, u16_t offset)
 {
-    connection = conn;    
     
     battery_level = getBatteryLevel();
     
@@ -63,7 +62,7 @@ void batery_notify(struct k_timer *timer)
     {
         return;
     }
-    printk("BAS:> %d\n\r", battery_level);
+    //printk("BAS:> %d\n\r", battery_level);
     battery_level = getBatteryLevel();
-    bt_gatt_notify(connection, &batery_level_svc.attrs[1], &battery_level, sizeof(battery_level));
+    bt_gatt_notify(default_connection, &batery_level_svc.attrs[1], &battery_level, sizeof(battery_level));
 }

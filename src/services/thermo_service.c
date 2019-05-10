@@ -12,7 +12,7 @@
 static u8_t thermo_subscribed;
 static temperature_measurement_t temperature_measurement = {0};
 static struct bt_gatt_indicate_params indicate_param = {0};
-static struct bt_conn *connection;
+extern struct bt_conn *default_connection;
 static u8_t   temperature_type = 0x02;
 /* Kernel's variables */
 static struct bt_gatt_ccc_cfg thermo_ccc_cfg[BT_GATT_CCC_MAX] = {};
@@ -83,12 +83,11 @@ void thermo_measurement_indicate(struct k_timer *timer)
     indicate_param.len  = sizeof(temperature_measurement);
     indicate_param.func = thermo_measurement_indicate_cb;
 
-    bt_gatt_indicate(connection, &indicate_param);
+    bt_gatt_indicate(default_connection, &indicate_param);
 }
 
 ssize_t	read_temperature_type(struct bt_conn *conn, const struct bt_gatt_attr *attr, void *buf, u16_t len, u16_t offset)
 {
-    connection = conn;
     printk("THERMO SERVICE:> read type\n\r");
     return bt_gatt_attr_read(conn, attr, buf, len, offset, &temperature_type, sizeof(temperature_type));
 }
